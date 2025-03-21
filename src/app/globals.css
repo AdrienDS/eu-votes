@@ -1,26 +1,147 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@plugin 'tailwind-scrollbar';
+
+@theme {
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-900: #111827;
+
+  --color-green-500: #22c55e;
+  --color-green-600: #16a34a;
+
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+
+  --color-yellow-500: #eab308;
+
+  --color-blue-600: #2563eb;
+  --color-blue-800: #1e40af;
+
+  --radius-lg: 0.5rem;
+  --radius-full: 9999px;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+
+  --min-width-0: 0;
+  --min-width-80: 20rem;
+  --min-width-110: 27.5rem;
+  --min-width-150: 37.5rem;
+  --min-width-200: 50rem;
+
+  --container-384: 24rem;
+  --container-400: 25rem;
+
+  --height-4: 1rem;
+  --height-5: 1.25rem;
+  --height-6: 1.5rem;
+  --height-8: 2rem;
+  --height-16: 4rem;
+  --height-24: 6rem;
+  --height-96: 24rem;
+  --height-140: 35rem;
+  --height-170: 42.5rem;
+  --height-600: 37.5rem;
+
+  --width-3: 0.75rem;
+  --width-4: 1rem;
+  --width-5: 1.25rem;
+  --width-6: 1.5rem;
+  --width-16: 4rem;
+
+  --z-index-10: 10;
+  --z-index-50: 50;
+  --z-index-100: 100;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@utility card-hover {
+  @apply hover:bg-gray-50;
+}
+
+@utility tooltip {
+  @apply absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-100 pointer-events-none;
+}
+
+@utility scrollbar-custom {
+  @apply scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent;
+}
+
+@utility link {
+  @apply text-blue-600 hover:text-blue-800 transition-colors;
+}
+
+@utility link-secondary {
+  @apply text-gray-600 hover:text-blue-600 transition-colors;
+}
+
+@utility primary-text {
+  @apply text-gray-900;
+}
+
+@utility secondary-text {
+  @apply text-gray-500;
+}
+
+@utility scrollbar-thin {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #d1d5db;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #9ca3af;
+  }
+}
+
+@layer utilities {
+  :root {
+    --background: #ffffff;
+    --foreground: #000000;
+  }
+
+  body {
+    color: var(--foreground);
+    background: var(--background);
+  }
+}
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #000000;
+  }
 }
