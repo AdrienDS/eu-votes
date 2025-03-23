@@ -1,5 +1,5 @@
 import { SearchFilters, Vote, SearchResponse } from '@/types';
-import { getCachedVote, setCachedVote } from './cache';
+import { getCachedVote, attemptToSetCachedVote } from './cache';
 
 const API_BASE_URL = 'https://howtheyvote.eu/api';
 
@@ -30,7 +30,7 @@ export async function searchVotes(filters: SearchFilters): Promise<SearchRespons
 
 export async function getVote(voteId: string): Promise<Vote> {
   // Try to get from cache first
-  const cachedVote = getCachedVote(voteId);
+  const cachedVote = await getCachedVote(voteId);
   if (cachedVote) {
     return cachedVote;
   }
@@ -43,8 +43,7 @@ export async function getVote(voteId: string): Promise<Vote> {
 
   const vote = await response.json();
   
-  // Cache the vote
-  setCachedVote(voteId, vote);
+  attemptToSetCachedVote(voteId, vote);
   
   return vote;
 }

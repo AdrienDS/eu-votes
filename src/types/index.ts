@@ -77,9 +77,11 @@ export interface Member {
   twitter?: string;
 }
 
+export type Position = 'FOR' | 'AGAINST' | 'DID_NOT_VOTE' | 'ABSTENTION';
+
 export interface MemberVote {
   member: Member;
-  position: 'FOR' | 'AGAINST' | 'ABSTENTION' | 'DID_NOT_VOTE';
+  position: Position;
 }
 
 export interface Vote extends VoteMetadata {
