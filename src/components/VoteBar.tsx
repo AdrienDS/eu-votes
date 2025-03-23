@@ -9,6 +9,19 @@ export function VoteBar({ stats, total }: VoteBarProps) {
   const getPercentage = (value: number) => ((value / total) * 100).toFixed(1);
   const getWidth = (value: number) => ((value / total) * 100).toFixed(1);
 
+  if (total === 0) return (
+    <div className="relative group min-w-[200px]">
+      <div className="flex h-6 rounded-xl overflow-hidden">
+        <div 
+          className="bg-gray-200 text-gray-400 text-xs flex items-center justify-center" 
+          style={{ width: '100%', fontSize: '0.65rem' }}
+        >
+          No position matching these filters
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="relative group min-w-[200px]">
       <div className="flex h-6 rounded-xl overflow-hidden">
