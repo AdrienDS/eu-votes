@@ -26,11 +26,9 @@ export default function Home() {
   const [hasNext, setHasNext] = useState(false);
   const [currentSearch, setCurrentSearch] = useState('');
   const [hasSearched, setHasSearched] = useState(false);
-  const [expandedVotes, setExpandedVotes] = useState<Set<string>>(new Set());
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [aboutModalOpen, setAboutModalOpen] = useState(false);
   const isInitialLoad = useRef(true);
-  const [expandedDetails, setExpandedDetails] = useState<Set<string>>(new Set());
 
   async function searchVotes (filters: SearchFilters, loadingSetter: (loading: boolean) => void, page?: number | null) {
     loadingSetter(true);
@@ -80,34 +78,6 @@ export default function Home() {
     isInitialLoad.current = false;
   }, []);
 
-  const toggleVote = (voteId: string) => {
-    setExpandedVotes(prev => {
-      const next = new Set(prev);
-      if (next.has(voteId)) {
-        next.delete(voteId);
-      } else {
-        next.add(voteId);
-      }
-      return next;
-    });
-  };
-
-  const toggleDetails = (voteId: string) => {
-    setExpandedDetails(prev => {
-      const next = new Set(prev);
-      if (next.has(voteId)) {
-        next.delete(voteId);
-      } else {
-        next.add(voteId);
-      }
-      return next;
-    });
-  };
-
-  const toggleAllVotes = (expand: boolean) => {
-    setExpandedVotes(expand ? new Set(votes.map(v => v.id)) : new Set());
-  };
-
   return (
     <main className="container mx-auto px-4 py-8">
       <Header filters={filters} />
@@ -139,12 +109,7 @@ export default function Home() {
           ) : (
             <VoteList
               votes={votes}
-              expandedVotes={expandedVotes}
-              expandedDetails={expandedDetails}
               filters={filters}
-              onToggleVote={toggleVote}
-              onToggleDetails={toggleDetails}
-              onToggleAllVotes={toggleAllVotes}
               loadingMore={loadingMore}
               hasNext={hasNext}
               searchMore={searchMore}
