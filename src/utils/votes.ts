@@ -1,4 +1,4 @@
-import { MemberVote, SearchFilters } from '@/types';
+import { MemberVote, Position, SearchFilters } from '@/types';
 
 export const filterVotes = (votes: MemberVote[], filters: SearchFilters): MemberVote[] => {
   return votes.filter(mv => 
@@ -15,3 +15,46 @@ export const calculateVoteStats = (votes: MemberVote[]) => {
     DID_NOT_VOTE: votes.filter(mv => mv.position === 'DID_NOT_VOTE').length
   };
 }; 
+
+export const positionNames = {
+  FOR: 'For',
+  AGAINST: 'Against',
+  ABSTENTION: 'Abstain',
+  DID_NOT_VOTE: 'No Vote',
+};
+
+export const positionColors = {
+  FOR: 'green-600',
+  AGAINST: 'red-600',
+  ABSTENTION: 'gray-400',
+  DID_NOT_VOTE: 'gray-300',
+};
+
+// export const positionBgColors = {
+//   FOR: 'bg-green-600',
+//   AGAINST: 'bg-red-600',
+//   ABSTENTION: 'bg-gray-400',
+//   DID_NOT_VOTE: 'bg-gray-300',
+// };
+
+// export const positionTextColors = {
+//   FOR: 'text-green-600',
+//   AGAINST: 'text-red-600',
+//   ABSTENTION: 'text-gray-400',
+//   DID_NOT_VOTE: 'text-gray-300',
+// };
+
+export const positionsOrders: {[key: string]: Position[]} = {
+  bar: [
+    'FOR',
+    'ABSTENTION',
+    'DID_NOT_VOTE',
+    'AGAINST',
+  ],
+  tooltip: [
+    'FOR',
+    'AGAINST',
+    'ABSTENTION',
+    'DID_NOT_VOTE',
+  ],
+}

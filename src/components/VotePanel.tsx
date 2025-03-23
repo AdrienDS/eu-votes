@@ -1,4 +1,4 @@
-import { SearchFilters, Vote } from '@/types';
+import { SearchFilters, Vote, Position } from '@/types';
 import { AutoSizer } from 'react-virtualized';
 import { formatDate } from '@/utils/date';
 import { VoteBar } from './VoteBar';
@@ -7,6 +7,7 @@ import { Facts } from './Facts';
 import { Grid, GridCellProps } from 'react-virtualized';
 import { MEPCard } from './MEPCard';
 import { useState } from 'react';
+import { calculateVoteStats, filterVotes, positionColors, positionNames, positionsOrders } from '@/utils/votes';
 
 interface VoteBarProps {
   vote: Vote;
@@ -16,23 +17,25 @@ interface VoteBarProps {
 }
 
 export function VotePanel({ vote, filters, onToggleVote, expandedVotes }: VoteBarProps) {
-  const [detailsVisible, setDetailsVisible] = useState(false); 
+  const [detailsVisible, setDetailsVisible] = useState(false);
+  const [positionFilter, setPositionFilter] = useState<Position[]>([]);
 
   function toggleDetailsVisible () {
     setDetailsVisible(!detailsVisible);
   }
 
-  const filteredVotes = vote.member_votes.filter(mv => 
-    (filters.countries.length === 0 || filters.countries.includes(mv.member.country.iso_alpha_2)) &&
-    (filters.groups.length === 0 || filters.groups.includes(mv.member.group.code))
-  );
+  function togglePositionFilter (position: Position) {
+    setPositionFilter(prev => prev.includes(position) ? prev.filter(p => p !== position) : [...prev, position]);
+  }
 
-  const stats = {
-    FOR: filteredVotes.filter(mv => mv.position === 'FOR').length,
-    AGAINST: filteredVotes.filter(mv => mv.position === 'AGAINST').length,
-    ABSTENTION: filteredVotes.filter(mv => mv.position === 'ABSTENTION').length,
-    DID_NOT_VOTE: filteredVotes.filter(mv => mv.position === 'DID_NOT_VOTE').length
-  };
+  const filteredVotes = filterVotes(vote.member_votes, filters);
+  
+  const stats = calculateVoteStats(filteredVotes);
+
+  const visibleVotes = positionFilter.filter(p => stats[p] > 0).length > 0 ?
+    filteredVotes.filter(vote => positionFilter.includes(vote.position)) :
+    filteredVotes;
+
 
   const total = Object.values(stats).reduce((a, b) => a + b, 0);
 
@@ -108,21 +111,35 @@ export function VotePanel({ vote, filters, onToggleVote, expandedVotes }: VoteBa
           </div>
 
           <div>
-            <h3 className="font-semibold primary-text mb-2">MEP Votes</h3>
+            <div className="items-center justify-between sm:flex mb-2">
+              <h3 className="font-semibold primary-text mb-2">MEP Votes</h3>
+              <div className="grid grid-cols-2 gap-2 sm:flex items-center gap-2 justify-between">
+                {positionsOrders.tooltip.map(position => (
+                  <button
+                    key={position}
+                    onClick={() => stats[position] > 0 ? togglePositionFilter(position) : null}
+                    className={`flex items-center gap-2 rounded-lg px-2 py-1 border border-gray-100 ${positionFilter.includes(position) ? 'bg-gray-100' : ''} ${stats[position] > 0 ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+                  >
+                    <div className={`w-3 h-3 bg-${positionColors[position]} rounded-sm`}></div>
+                    <span className={`${stats[position] > 0 ? 'primary-text' : 'secondary-text'}`}>{positionNames[position]}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
             <div className="h-[400px] md:h-[600px] pr-4">
               <AutoSizer>
                 {({ width, height }) => {
                   const cardWidth = 420;
                   const columnCount = Math.max(1, Math.floor(width / cardWidth));
-                  const rowCount = Math.ceil(filteredVotes.length / columnCount);
+                  const rowCount = Math.ceil(visibleVotes.length / columnCount);
                   // console.log('AutoSizer', { width, height, columnCount, rowCount });
                   const cellRenderer = ({ columnIndex, rowIndex, key, style }: GridCellProps) => {
                     const index = rowIndex * columnCount + columnIndex;
-                    if (index >= filteredVotes.length) return null;
+                    if (index >= visibleVotes.length) return null;
                     return (
                       <MEPCard
                         key={key}
-                        vote={filteredVotes[index]}
+                        vote={visibleVotes[index]}
                         style={{
                           ...style,
                           width: Math.min(400, width / columnCount - 20),
