@@ -4,6 +4,7 @@ import { MEPCard } from './MEPCard';
 import { ChevronDown } from './icons';
 import { AutoSizer, Grid, GridCellProps } from 'react-virtualized';
 import { Facts } from './Facts';
+import { Loader } from './Loader';
 
 interface VoteListProps {
   votes: Vote[];
@@ -13,6 +14,9 @@ interface VoteListProps {
   onToggleVote: (voteId: string) => void;
   onToggleDetails: (voteId: string) => void;
   onToggleAllVotes?: (expand: boolean) => void;
+  loadingMore: boolean;
+  hasNext: boolean;
+  searchMore: () => void;
 }
 
 export function VoteList({
@@ -22,7 +26,10 @@ export function VoteList({
   filters,
   onToggleVote,
   onToggleDetails,
-  onToggleAllVotes
+  onToggleAllVotes,
+  loadingMore,
+  hasNext,
+  searchMore,
 }: VoteListProps) {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString(undefined, {
@@ -196,6 +203,20 @@ export function VoteList({
             )}
           </div>
         ))}
+
+        <div>
+        {loadingMore ? (
+          <Loader className="py-4" />
+        ) : (
+          hasNext && (
+            <div className="flex justify-center items-center py-4">
+              <button onClick={searchMore} className="bg-gray-500 text-white px-4 py-2 rounded-md cursor-pointer">
+                Load More
+              </button>
+            </div>
+          )
+        )}
+        </div>
       </div>
     </>
   );

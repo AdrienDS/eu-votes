@@ -3,14 +3,14 @@ import { getCachedVote, attemptToSetCachedVote } from './cache';
 
 const API_BASE_URL = 'https://howtheyvote.eu/api';
 
-export async function searchVotes(filters: SearchFilters): Promise<SearchResponse> {
-  console.log('Attempting to search votes with filters:', filters);
+export async function searchVotes(filters: SearchFilters, page?: number|null): Promise<SearchResponse> {
+  // console.log('Attempting to search votes with filters:', filters);
   // Don't make the API call if there's no search term
   if (!filters.searchTerm.trim()) {
     return {
       results: [],
       total: 0,
-      page: 1,
+      page: page || 1,
       page_size: 20,
       has_prev: false,
       has_next: false
@@ -19,7 +19,8 @@ export async function searchVotes(filters: SearchFilters): Promise<SearchRespons
 
   const params = new URLSearchParams();
   params.set('q', filters.searchTerm.trim());
-
+  if (page) params.set('page', page.toString());
+  
   const response = await fetch(`${API_BASE_URL}/votes/search?${params.toString()}`);
   if (!response.ok) {
     throw new Error('Failed to fetch votes');
@@ -48,10 +49,10 @@ export async function getVote(voteId: string): Promise<Vote> {
   return vote;
 }
 
-export async function searchVotesWithDetails(filters: SearchFilters): Promise<SearchResponse> {
+export async function searchVotesWithDetails(filters: SearchFilters, page?: number|null): Promise<SearchResponse> {
   try {
     // First, get the search results
-    const searchResponse = await searchVotes(filters);
+    const searchResponse = await searchVotes(filters, page);
     
     // Then, fetch details for each vote
     const votesWithDetails = await Promise.all(
@@ -74,6 +75,7 @@ export async function searchVotesWithDetails(filters: SearchFilters): Promise<Se
         }
       })
     );
+    // console.log('searchResponse:', searchResponse);
 
     return {
       results: votesWithDetails,
