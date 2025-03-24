@@ -114,16 +114,20 @@ export function VotePanel({ vote, filters, onToggleVote, expandedVotes }: VoteBa
             <div className="items-center justify-between sm:flex mb-2">
               <h3 className="font-semibold primary-text mb-2">MEP Votes</h3>
               <div className="grid grid-cols-2 gap-2 sm:flex items-center gap-2 justify-between">
-                {positionsOrders.tooltip.map(position => (
-                  <button
-                    key={position}
-                    onClick={() => stats[position] > 0 ? togglePositionFilter(position) : null}
-                    className={`flex items-center gap-2 rounded-lg px-2 py-1 border border-gray-100 ${positionFilter.includes(position) ? 'bg-gray-100' : ''} ${stats[position] > 0 ? 'cursor-pointer' : 'cursor-not-allowed'}`}
-                  >
-                    <div className={`w-3 h-3 bg-${positionColors[position]} rounded-sm`}></div>
-                    <span className={`${stats[position] > 0 ? 'primary-text' : 'secondary-text'}`}>{positionNames[position]}</span>
-                  </button>
-                ))}
+                {positionsOrders.tooltip.map(position => {
+                  const isEnabled = stats[position] > 0;
+                  const isActive = positionFilter.includes(position) && isEnabled;
+                  return (
+                    <button
+                      key={position}
+                      onClick={() => isEnabled ? togglePositionFilter(position) : null}
+                      className={`flex items-center gap-2 rounded-lg px-2 py-1 border border-gray-200 ${isActive ? 'bg-gray-200' : ''} ${isEnabled ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+                    >
+                      <div className={`w-3 h-3 bg-${positionColors[position]} rounded-sm`}></div>
+                      <span className={`${isEnabled ? 'primary-text' : 'secondary-text'}`}>{positionNames[position]}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
             <div className="h-[400px] md:h-[600px] pr-4">
