@@ -6,7 +6,7 @@ import { ChevronDown } from './icons';
 import { Facts } from './Facts';
 import { Grid, GridCellProps } from 'react-virtualized';
 import { MEPCard } from './MEPCard';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { calculateVoteStats, filterVotes, positionColors, positionNames, positionsOrders } from '@/utils/votes';
 
 interface VoteBarProps {
@@ -20,16 +20,16 @@ export function VotePanel({ vote, filters, onToggleVote, expandedVotes }: VoteBa
   const [detailsVisible, setDetailsVisible] = useState(false);
   const [positionFilter, setPositionFilter] = useState<Position[]>([]);
 
-  function toggleDetailsVisible () {
+  const toggleDetailsVisible = useCallback(() => {
     setDetailsVisible(!detailsVisible);
-  }
+  }, [detailsVisible]);
 
-  function togglePositionFilter (position: Position) {
+  const togglePositionFilter = useCallback((position: Position) => {
     setPositionFilter(prev => prev.includes(position) ? prev.filter(p => p !== position) : [...prev, position]);
-  }
+  }, []);
 
   const filteredVotes = filterVotes(vote.member_votes, filters);
-  
+
   const stats = calculateVoteStats(filteredVotes);
 
   const visibleVotes = positionFilter.filter(p => stats[p] > 0).length > 0 ?
@@ -71,7 +71,7 @@ export function VotePanel({ vote, filters, onToggleVote, expandedVotes }: VoteBa
           <div className="md:hidden mb-4">
             <button
               onClick={() => toggleDetailsVisible()}
-              className="flex items-center gap-2 secondary-text hover:text-gray-400"
+              className="flex items-center gap-2 secondary-text hover:text-gray-400 cursor-pointer"
             >
               <span className="font-semibold">Details</span>
               <ChevronDown className={`h-5 w-5 transform transition-transform ${detailsVisible ? 'rotate-180' : ''}`} />
