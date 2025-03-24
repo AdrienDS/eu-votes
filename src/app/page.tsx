@@ -10,6 +10,7 @@ import { SearchPanel } from '@/components/SearchPanel';
 import { HelpModal } from '@/components/HelpModal';
 import { AboutModal } from '@/components/AboutModal';
 import { Loader } from '@/components/Loader';
+import { sampleSearchTerms } from '@/utils/votes';
 
 export default function Home() {
   const [filters, setFilters] = useState<SearchFilters>({
@@ -64,6 +65,12 @@ export default function Home() {
     if (newVotes?.length) setVotes(newVotes);
   }, [filters]);
 
+  const handleSeachAndRun = useCallback(async (term: string) => {
+    setFilters({ ...filters, searchTerm: term });
+    const newVotes = await searchVotes({ ...filters, searchTerm: term }, setLoading);
+    if (newVotes?.length) setVotes(newVotes);
+  }, [filters, handleSearch]);
+
   useEffect(() => {
     if (!isInitialLoad.current) return;
     
@@ -96,7 +103,19 @@ export default function Home() {
         <div className="space-y-4">
           {isInitialLoad.current ? '' : !hasSearched ? (
             <div className="text-center text-gray-900 py-8">
-              Try searching votes using keywords
+              Try searching votes using keywords, for example:
+              <br />
+              {
+                sampleSearchTerms.map(term => (
+                  <button 
+                    key={term}
+                    className="link mx-1 px-1 cursor-pointer" 
+                    onClick={() => handleSeachAndRun(term)}
+                  >
+                    {term}
+                  </button>
+                ))
+              }
             </div>
           ) : total === 0 ? (
             <div className="text-center text-gray-900 py-8">

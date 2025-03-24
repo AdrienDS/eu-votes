@@ -58,3 +58,15 @@ export const positionsOrders: {[key: string]: Position[]} = {
     'DID_NOT_VOTE',
   ],
 }
+
+export const sampleSearchTerms = [
+  'Ukraine',
+  'CO2',
+  'Tax',
+  'Trade',
+  'Energy',
+  'Migration',
+  'Education',
+  'Transport',
+  'Cyber',
+];
