@@ -7,8 +7,6 @@ import { VoteList } from '@/components/VoteList';
 import { COUNTRIES, GROUPS } from '@/constants/filters';
 import { Header } from '@/components/Header';
 import { SearchPanel } from '@/components/SearchPanel';
-import { HelpModal } from '@/components/HelpModal';
-import { AboutModal } from '@/components/AboutModal';
 import { Loader } from '@/components/Loader';
 import { sampleSearchTerms } from '@/utils/votes';
 
@@ -27,8 +25,6 @@ export default function Home() {
   const [hasNext, setHasNext] = useState(false);
   const [currentSearch, setCurrentSearch] = useState('');
   const [hasSearched, setHasSearched] = useState(false);
-  const [helpModalOpen, setHelpModalOpen] = useState(false);
-  const [aboutModalOpen, setAboutModalOpen] = useState(false);
   const isInitialLoad = useRef(true);
 
   async function searchVotes (filters: SearchFilters, loadingSetter: (loading: boolean) => void, page?: number | null) {
@@ -136,9 +132,6 @@ export default function Home() {
           )}
         </div>
       )}
-
-      <HelpModal isOpen={helpModalOpen} onClose={() => setHelpModalOpen(false)} />
-      <AboutModal isOpen={aboutModalOpen} onClose={() => setAboutModalOpen(false)} />
     </main>
   );
 }
