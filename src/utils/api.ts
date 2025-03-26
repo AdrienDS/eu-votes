@@ -3,10 +3,10 @@ import { getCachedVote, attemptToSetCachedVote } from './cache';
 
 const API_BASE_URL = 'https://howtheyvote.eu/api';
 
-export async function searchVotes(filters: SearchFilters, page?: number|null): Promise<SearchResponse> {
+export async function searchVotes(searchTerm: string, filters: SearchFilters, page?: number|null): Promise<SearchResponse> {
   // console.log('Attempting to search votes with filters:', filters);
   // Don't make the API call if there's no search term
-  if (!filters.searchTerm.trim()) {
+  if (!searchTerm.trim()) {
     return {
       results: [],
       total: 0,
@@ -18,7 +18,7 @@ export async function searchVotes(filters: SearchFilters, page?: number|null): P
   }
 
   const params = new URLSearchParams();
-  params.set('q', filters.searchTerm.trim());
+  params.set('q', searchTerm.trim());
   if (page) params.set('page', page.toString());
   
   const response = await fetch(`${API_BASE_URL}/votes/search?${params.toString()}`);
@@ -49,10 +49,10 @@ export async function getVote(voteId: string): Promise<Vote> {
   return vote;
 }
 
-export async function searchVotesWithDetails(filters: SearchFilters, page?: number|null): Promise<SearchResponse> {
+export async function searchVotesWithDetails(searchTerm: string, filters: SearchFilters, page?: number|null): Promise<SearchResponse> {
   try {
     // First, get the search results
-    const searchResponse = await searchVotes(filters, page);
+    const searchResponse = await searchVotes(searchTerm, filters, page);
     
     // Then, fetch details for each vote
     const votesWithDetails = await Promise.all(
@@ -91,30 +91,32 @@ export async function searchVotesWithDetails(filters: SearchFilters, page?: numb
   }
 }
 
-export const parseUrlParams = (): SearchFilters => {
+export const parseUrlParams = (): { searchTerm: string; filters: SearchFilters } => {
   // Check if we're in a browser environment
   if (typeof window === 'undefined') {
-    return { searchTerm: '', countries: [], groups: [] };
+    return { searchTerm: '', filters: { countries: [], groups: [] } };
   }
   
   try {
     const params = new URLSearchParams(window.location.search);
     return {
       searchTerm: params.get('q') || '',
-      countries: params.get('countries')?.split(',').filter(Boolean) || [],
-      groups: params.get('groups')?.split(',').filter(Boolean) || [],
+      filters: {
+        countries: params.get('countries')?.split(',').filter(Boolean) || [],
+        groups: params.get('groups')?.split(',').filter(Boolean) || [],
+      },
     };
   } catch (error) {
     console.error('Error parsing URL params:', error);
-    return { searchTerm: '', countries: [], groups: [] };
+    return { searchTerm: '', filters: { countries: [], groups: [] } };
   }
 };
 
-export const generateShareUrl = (filters: SearchFilters): string => {
+export const generateShareUrl = (searchTerm: string, filters: SearchFilters): string => {
   if (typeof window === 'undefined') return '';
   
   const params = new URLSearchParams();
-  if (filters.searchTerm) params.set('q', filters.searchTerm);
+  if (searchTerm) params.set('q', searchTerm);
   if (filters.countries.length > 0) params.set('countries', filters.countries.join(','));
   if (filters.groups.length > 0) params.set('groups', filters.groups.join(','));
   

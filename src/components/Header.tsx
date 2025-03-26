@@ -7,9 +7,10 @@ import Image from 'next/image';
 
 interface HeaderProps {
   filters: SearchFilters;
+  searchTerm: string;
 }
 
-export const Header = ({ filters }: HeaderProps) => {
+export const Header = ({ filters, searchTerm }: HeaderProps) => {
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [aboutModalOpen, setAboutModalOpen] = useState(false);
 
@@ -18,8 +19,8 @@ export const Header = ({ filters }: HeaderProps) => {
     const params = new URLSearchParams();
     
     // Add search term if present
-    if (filters.searchTerm) {
-      params.set('q', filters.searchTerm);
+    if (searchTerm) {
+      params.set('q', searchTerm);
     }
     
     // Add countries if any are selected
@@ -41,7 +42,7 @@ export const Header = ({ filters }: HeaderProps) => {
   };
 
   const hasSearchParams = () => {
-    return filters.searchTerm || filters.countries.length > 0 || filters.groups.length > 0;
+    return searchTerm || filters.countries.length > 0 || filters.groups.length > 0;
   };
 
   const handleShare = async () => {
@@ -118,15 +119,17 @@ export const Header = ({ filters }: HeaderProps) => {
             title="Share"
           >
             <Share className="h-5 w-5" />
-            <span className="hidden sm:inline">Share</span>
+            <span className="hidden sm:inline" id="share-btn">Share</span>
           </button>
           <button
+            id="help-btn"
             onClick={() => setHelpModalOpen(true)}
             className="link-secondary cursor-pointer"
           >
             Help
           </button>
           <button
+            id="about-btn"
             onClick={() => setAboutModalOpen(true)}
             className="link-secondary cursor-pointer"
           >

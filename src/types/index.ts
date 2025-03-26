@@ -106,7 +106,6 @@ export interface Vote extends VoteMetadata {
 }
 
 export interface SearchFilters {
-  searchTerm: string;
   countries: string[];
   groups: string[];
 }

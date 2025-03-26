@@ -71,6 +71,7 @@ export default function SearchableModal({
         </div>
       )}
       <button
+        id={`${title}-modal-btn`}
         onClick={() => setIsOpen(!isOpen)}
         className="h-10 px-4 border rounded-lg primary-text hover:bg-gray-50 flex items-center gap-2 cursor-pointer"
         style={{ minWidth }}
@@ -86,7 +87,7 @@ export default function SearchableModal({
                   alt={`${items.find(i => i.value === selectedItems[0])?.label} flag`}
                 />
               ) : (
-                <span className="primary-text">
+                <span className="primary-text" id={`${title}-modal-item-list`}>
                   {items.find(i => i.value === selectedItems[0])?.short_label || items.find(i => i.value === selectedItems[0])?.label}
                 </span>
               )
@@ -100,7 +101,7 @@ export default function SearchableModal({
                       alt={`${items.find(i => i.value === item)?.label} flag`}
                     />
                   ) : (
-                    <span key={item} className="primary-text">
+                    <span key={item} className="primary-text" id={`${title}-modal-item-${item}`}>
                       {items.find(i => i.value === item)?.short_label || items.find(i => i.value === item)?.label}
                     </span>
                   )
