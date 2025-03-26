@@ -60,3 +60,9 @@ The application uses the [howtheyvote.eu](https://howtheyvote.eu) API to fetch v
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Support
+
+If you like this tool and want to show some support, you’re welcome to [buy me a coffee here](https://buymeacoffee.com/adriend) or on [PayPal @adri2124](https://paypal.me/adri2124)!
+
+Also consider supporting [HowTheyVote.eu](https://howtheyvote.eu/about) providing a free API with all the data presented on this tool.

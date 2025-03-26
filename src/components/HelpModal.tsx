@@ -30,6 +30,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
             <li>Click on a vote to see detailed information</li>
             <li>View vote statistics and breakdowns</li>
             <li>See how individual MEPs voted</li>
+            <li>Filter MEPs by position (For, Against, Abstained, ...)</li>
           </ul>
           <h4 className="font-medium primary-text mb-2">Share</h4>
           <p className="text-left">
