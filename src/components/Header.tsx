@@ -4,6 +4,7 @@ import { Share } from '@/components/icons';
 import { useState } from 'react';
 import { SearchFilters } from '@/types';
 import Image from 'next/image';
+import { trackEvent } from '@/utils/mixpanelClient';
 
 interface HeaderProps {
   filters: SearchFilters;
@@ -114,7 +115,8 @@ export const Header = ({ filters, searchTerm }: HeaderProps) => {
         </div>
         <div className="flex gap-6">
           <button
-            onClick={handleShare}
+            id="share-btn"
+            onClick={() => trackEvent('Share', { ...filters, searchTerm }) && handleShare()}
             className="link-secondary cursor-pointer flex items-center gap-1"
             title="Share"
           >
@@ -123,14 +125,14 @@ export const Header = ({ filters, searchTerm }: HeaderProps) => {
           </button>
           <button
             id="help-btn"
-            onClick={() => setHelpModalOpen(true)}
+            onClick={() => trackEvent('Help') && setHelpModalOpen(true)}
             className="link-secondary cursor-pointer"
           >
             Help
           </button>
           <button
             id="about-btn"
-            onClick={() => setAboutModalOpen(true)}
+            onClick={() => trackEvent('About') && setAboutModalOpen(true)}
             className="link-secondary cursor-pointer"
           >
             About

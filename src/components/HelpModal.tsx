@@ -1,4 +1,5 @@
 import { positionColors } from '@/utils/votes';
+import { trackEvent } from '@/utils/mixpanelClient';
 import { Modal } from './Modal';
 import { Email, Facebook, Filter, Search, Share, Twitter } from './icons';
 
@@ -13,12 +14,14 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
       <div className="mt-3 sm:mt-0 sm:text-left">
         <div className="mt-4 text-sm secondary-text">
           <p className="mb-4 text-left">
-            This tool helps you explore how Members of the European Parliament (MEPs) voted on various issues.
+            This app helps you explore how {' '}
+            <span className="underline decoration-dotted underline-offset-4">Members of the European Parliament (MEPs)</span>
+            {' '}voted on various issues.
           </p>
           <h4 className="font-medium primary-text mb-2">Search and Filter</h4>
           <ul className="list-disc list-inside space-y-1 mb-4 text-left">
             <li>
-              <Search className="h-4.5 w-4.5 inline-block mr-1 "/>
+              <Search className="h-4.5 w-4.5 inline-block mr-1.5 "/>
               <span>  
                 Use the search bar to find specific votes. 
                 You can search for keywords such as &ldquo;Environment&rdquo;, &ldquo;Ukraine&rdquo;, &ldquo;Taxes&rdquo;, etc...
@@ -31,12 +34,13 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
             <li>
               <Filter className="h-4 w-4 inline-block mr-2" />
               <span>
-                Filter by <a href="https://en.wikipedia.org/wiki/Political_groups_of_the_European_Parliament" target="_blank" className="link">political group</a>
+                Filter by {' '}
+                <a href="https://en.wikipedia.org/wiki/Political_groups_of_the_European_Parliament" target="_blank" className="link" onClick={() => trackEvent('Help Wiki PoliticalGroup')}>political group</a>
                 {' '}to see voting patterns within groups
                 </span>
             </li>
             <li>To find out which European Parliament Political Group a MEP belongs to, you can use the{' '}
-              <a href="https://www.europarl.europa.eu/meps/en/search/advanced" target="_blank" className="link">European Parliament Advanced search</a>
+              <a href="https://www.europarl.europa.eu/meps/en/search/advanced" target="_blank" className="link" onClick={() => trackEvent('Help Parliament AdvancedSearch')}>European Parliament Advanced search</a>
               .</li>
           </ul>
           <h4 className="font-medium primary-text mb-2">View Details</h4>
@@ -62,7 +66,9 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
           </ul>
           <h4 className="font-medium primary-text mb-2">Share</h4>
           <ul className="list-disc list-inside space-y-1 mb-4 text-left">
-            <li><Share className="h-4 w-4 inline-block mr-2" /> Use the share button to generate a link to your current view, including all active filters.</li>  
+            <li><Share className="h-4 w-4 inline-block mr-2" /> {' '}
+            Use the share button to generate a link to your current view, 
+            including your search term and all your active filters.</li>  
           </ul>
         </div>
       </div>
