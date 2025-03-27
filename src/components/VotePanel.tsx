@@ -2,7 +2,7 @@ import { SearchFilters, Vote, Position } from '@/types';
 import { AutoSizer } from 'react-virtualized';
 import { formatDate } from '@/utils/date';
 import { VoteBar } from './VoteBar';
-import { ChevronDown } from './icons';
+import { ChevronDown, Filter } from './icons';
 import { Facts } from './Facts';
 import { Grid, GridCellProps } from 'react-virtualized';
 import { MEPCard } from './MEPCard';
@@ -112,8 +112,14 @@ export function VotePanel({ vote, filters, onToggleVote, expandedVotes }: VoteBa
 
           <div>
             <div className="items-center justify-between sm:flex mb-2">
+              <div className="flex items-center gap-2 text-gray-500 sm:hidden float-right">
+                  <Filter className="h-5 w-5 mr-1" />
+                </div>
               <h3 className="font-semibold primary-text mb-2">MEP Votes</h3>
               <div className="grid grid-cols-2 gap-2 sm:flex items-center gap-2 justify-between">
+                <div className="flex items-center gap-2 text-gray-500 hidden sm:block">
+                  <Filter className="h-5 w-5 mr-1" />
+                </div>
                 {positionsOrders.tooltip.map(position => {
                   const isEnabled = stats[position] > 0;
                   const isActive = positionFilter.includes(position) && isEnabled;
@@ -121,10 +127,10 @@ export function VotePanel({ vote, filters, onToggleVote, expandedVotes }: VoteBa
                     <button
                       key={position}
                       onClick={() => isEnabled ? togglePositionFilter(position) : null}
-                      className={`flex items-center gap-2 rounded-lg px-2 py-1 border border-gray-200 ${isActive ? 'bg-gray-200' : ''} ${isEnabled ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+                      className={`flex items-center gap-2 rounded-lg px-2 py-1 border border-gray-200 ${isActive ? 'bg-gray-200' : ''} ${isEnabled ? 'cursor-pointer hover:ring-1 hover:ring-gray-100' : 'cursor-not-allowed'}`}
                     >
                       <div className={`w-3 h-3 bg-${positionColors[position]} rounded-sm`}></div>
-                      <span className={`${isEnabled ? 'primary-text' : 'secondary-text'}`}>{positionNames[position]}</span>
+                      <span className={`${isEnabled ? 'primary-text hover:text-gray-700' : 'secondary-text'}`}>{positionNames[position]}</span>
                     </button>
                   );
                 })}

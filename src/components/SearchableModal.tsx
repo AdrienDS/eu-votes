@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Flag } from './Flag';
+import { Filter } from './icons';
 
 interface SearchableModalProps {
   title: string;
@@ -66,18 +67,23 @@ export default function SearchableModal({
   return (
     <div className="relative mt-6" ref={modalRef}>
       {selectedItems.length > 0 && (
-        <div className="absolute -top-5 left-2 text-xs secondary-text">
+        <div className="absolute -top-5 left-2 text-xs secondary-text flex items-center gap-2">
           {getDisplayLabel(selectedItems)}
         </div>
       )}
       <button
         id={`${title}-modal-btn`}
         onClick={() => setIsOpen(!isOpen)}
-        className="h-10 px-4 border rounded-lg primary-text hover:bg-gray-50 flex items-center gap-2 cursor-pointer"
+        className="h-10 px-4 border rounded-lg primary-text hover:bg-gray-50 flex items-center gap-2 cursor-pointer hover:ring-1 hover:ring-gray-100"
         style={{ minWidth }}
       >
         {selectedItems.length === 0 ? (
-          <span className="secondary-text">{title}</span>
+          <div className="flex items-center gap-2 text-gray-500">
+            <Filter className="h-4.5 w-4.5" />
+            <span className="secondary-text">
+              {title}
+            </span>
+          </div>
         ) : (
           <div className="flex items-center gap-2">
             {selectedItems.length === 1 ? (

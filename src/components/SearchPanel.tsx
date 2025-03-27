@@ -41,7 +41,7 @@ export const SearchPanel = ({
             title="Search"
             aria-label="Search"
           >
-            <Search className="h-5 w-5" />
+            <Search className="h-6 w-6" />
           </button>
         </div>
       </div>
@@ -62,7 +62,7 @@ export const SearchPanel = ({
           items={groups}
           selectedItems={filters.groups}
           onSelect={(items: string[]) => onFiltersChange({ ...filters, groups: items })}
-          minWidth="110px"
+          minWidth="180px"
         />
       </div>
     </div>
