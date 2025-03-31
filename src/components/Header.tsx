@@ -52,12 +52,12 @@ export const Header = ({ filters, searchTerm }: HeaderProps) => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'EU Votes Search',
+          title: 'EU Vote Search',
           text: 'Search and explore votes in the European Parliament',
           url: shareUrl
         });
       } catch (err) {
-        console.error('Error sharing:', err);
+        console.warn('Error sharing:', err);
         copyToClipboardFallback(shareUrl);
       }
     } else {
@@ -102,14 +102,14 @@ export const Header = ({ filters, searchTerm }: HeaderProps) => {
           <div className="relative h-[50px] w-[50px]">
             <Image
               src="/favicon.svg"
-              alt="EU Votes Logo"
+              alt="EU Vote Search Logo"
               fill
               className="object-contain"
               priority
             />
           </div>
           <h1 className="text-lg sm:text-xl font-bold primary-text flex flex-col sm:flex-row sm:gap-1">
-            <span>EU Votes</span>
+            <span>EU Vote</span>
             <span>Search</span>
           </h1>
         </div>

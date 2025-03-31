@@ -5,21 +5,21 @@
         <!-- First bar (50-50 split) -->
         <g transform="translate(5.47,11)">
             <!-- Base bar in EU blue -->
-            <rect x="0" y="0" width="21" height="5.4" rx="2.7" ry="2.7" fill="#003399"/>
+            <rect x="0" y="0" width="23.5" height="5.4" rx="2.7" ry="2.7" fill="#003399"/>
             <!-- Grey overlay for the right half -->
-            <path d="M10.5 0h10.5v5.4h-10.5z" fill="#4a5568"/>
+            <path d="M12 0h9v5.4h-9z" fill="#5b6880"/>
             <!-- Round the right edge only -->
-            <path d="M18.3 0h2.7a2.7 2.7 0 0 1 2.7 2.7v0a2.7 2.7 0 0 1-2.7 2.7h-2.7z" fill="#4a5568"/>
+            <path d="M18.3 0h2.7a2.7 2.7 0 0 1 2.7 2.7v0a2.7 2.7 0 0 1-2.7 2.7h-2.7z" fill="#5b6880"/>
         </g>
         
         <!-- Second bar (80-20 split) -->
         <g transform="translate(5.47,18.8)">
             <!-- Base bar in EU blue -->
-            <rect x="0" y="0" width="21" height="5.4" rx="2.7" ry="2.7" fill="#003399"/>
+            <rect x="0" y="0" width="23.5" height="5.4" rx="2.7" ry="2.7" fill="#003399"/>
             <!-- Grey overlay for the right 20% -->
-            <path d="M16.8 0h4.2v5.4h-4.2z" fill="#4a5568"/>
+            <path d="M18.6 0h2v5.4h-2z" fill="#5b6880"/>
             <!-- Round the right edge only -->
-            <path d="M18.3 0h2.7a2.7 2.7 0 0 1 2.7 2.7v0a2.7 2.7 0 0 1-2.7 2.7h-2.7z" fill="#4a5568"/>
+            <path d="M18.3 0h2.7a2.7 2.7 0 0 1 2.7 2.7v0a2.7 2.7 0 0 1-2.7 2.7h-2.7z" fill="#5b6880"/>
         </g>
     </g>
 
