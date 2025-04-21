@@ -102,7 +102,16 @@ export function VotePanel({ vote, filters, onToggleVote, expandedVotes }: VoteBa
                   <h3 className="font-semibold primary-text">Sources</h3>
                   <ul className="list-disc list-inside primary-text">
                     {vote.sources.map((source, index) => (
-                      <li key={index}>{source.name}</li>
+                      <li key={index}>
+                        <a 
+                          href={source.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="hover:text-blue-600"
+                        >
+                          {source.name}
+                        </a>
+                      </li>
                     ))}
                   </ul>
                 </div>
