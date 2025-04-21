@@ -1,6 +1,7 @@
 import { Search } from '@/components/icons';
 import SearchableModal from './SearchableModal';
-import { SearchFilters } from '@/types';
+import { SearchFilters, SortOption } from '@/types';
+import { SortDropdown } from './SortDropdown';
 
 interface SearchPanelProps {
   filters: SearchFilters;
@@ -10,6 +11,8 @@ interface SearchPanelProps {
   onSearch: () => void;
   countries: Array<{ value: string; label: string; short_label?: string }>;
   groups: Array<{ value: string; label: string; short_label?: string }>;
+  sortBy: SortOption;
+  onSortChange: (sortBy: SortOption) => void;
 }
 
 export const SearchPanel = ({ 
@@ -19,7 +22,9 @@ export const SearchPanel = ({
   onFiltersChange, 
   onSearch,
   countries,
-  groups
+  groups,
+  sortBy,
+  onSortChange
 }: SearchPanelProps) => {
   return (
     <div className="mb-8">
@@ -44,6 +49,7 @@ export const SearchPanel = ({
             <Search className="h-6 w-6" />
           </button>
         </div>
+        <SortDropdown sortBy={sortBy} onSortChange={onSortChange} onSearch={onSearch} />
       </div>
 
       <div className="flex gap-4">

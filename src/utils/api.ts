@@ -1,9 +1,9 @@
-import { SearchFilters, Vote, SearchResponse } from '@/types';
+import { SearchFilters, Vote, SearchResponse, SortOption } from '@/types';
 import { getCachedVote, attemptToSetCachedVote } from './cache';
 
 const API_BASE_URL = 'https://howtheyvote.eu/api';
 
-export async function searchVotes(searchTerm: string, filters: SearchFilters, page?: number|null): Promise<SearchResponse> {
+export async function searchVotes(searchTerm: string, sortBy?: SortOption|null, page?: number|null): Promise<SearchResponse> {
   // console.log('Attempting to search votes with filters:', filters);
   // Don't make the API call if there's no search term
   if (!searchTerm.trim()) {
@@ -20,7 +20,11 @@ export async function searchVotes(searchTerm: string, filters: SearchFilters, pa
   const params = new URLSearchParams();
   params.set('q', searchTerm.trim());
   if (page) params.set('page', page.toString());
-  
+  if (sortBy && sortBy !== 'RELEVANCE') {
+    params.set('sort_by', 'timestamp');
+    params.set('sort_order', sortBy === 'OLDEST' ? 'asc' : 'desc'); 
+  }
+
   const response = await fetch(`${API_BASE_URL}/votes/search?${params.toString()}`);
   if (!response.ok) {
     throw new Error('Failed to fetch votes');
@@ -49,10 +53,10 @@ export async function getVote(voteId: string): Promise<Vote> {
   return vote;
 }
 
-export async function searchVotesWithDetails(searchTerm: string, filters: SearchFilters, page?: number|null): Promise<SearchResponse> {
+export async function searchVotesWithDetails(searchTerm: string, filters: SearchFilters, sortBy: SortOption, page?: number|null): Promise<SearchResponse> {
   try {
     // First, get the search results
-    const searchResponse = await searchVotes(searchTerm, filters, page);
+    const searchResponse = await searchVotes(searchTerm, sortBy, page);
     
     // Then, fetch details for each vote
     const votesWithDetails = await Promise.all(
@@ -91,10 +95,10 @@ export async function searchVotesWithDetails(searchTerm: string, filters: Search
   }
 }
 
-export const parseUrlParams = (): { searchTerm: string; filters: SearchFilters } => {
+export const parseUrlParams = (): { searchTerm: string; filters: SearchFilters; sortBy: SortOption } => {
   // Check if we're in a browser environment
   if (typeof window === 'undefined') {
-    return { searchTerm: '', filters: { countries: [], groups: [] } };
+    return { searchTerm: '', filters: { countries: [], groups: [] }, sortBy: 'RELEVANCE' };
   }
   
   try {
@@ -105,10 +109,11 @@ export const parseUrlParams = (): { searchTerm: string; filters: SearchFilters }
         countries: params.get('countries')?.split(',').filter(Boolean) || [],
         groups: params.get('groups')?.split(',').filter(Boolean) || [],
       },
+      sortBy: params.get('sort') as SortOption || 'RELEVANCE',
     };
   } catch (error) {
     console.error('Error parsing URL params:', error);
-    return { searchTerm: '', filters: { countries: [], groups: [] } };
+    return { searchTerm: '', filters: { countries: [], groups: [] }, sortBy: 'RELEVANCE' };
   }
 };
 

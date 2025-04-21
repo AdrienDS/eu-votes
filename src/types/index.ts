@@ -77,6 +77,9 @@ export interface Member {
   twitter?: string;
 }
 
+
+export type SortOption = 'RELEVANCE' | 'OLDEST' | 'NEWEST';
+
 export type Position = 'FOR' | 'AGAINST' | 'DID_NOT_VOTE' | 'ABSTENTION';
 
 export interface MemberVote {

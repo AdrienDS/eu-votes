@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
-import { SearchFilters, Vote } from '@/types';
+import { SearchFilters, SortOption, Vote } from '@/types';
 import { searchVotesWithDetails, parseUrlParams } from '@/utils/api';
 import { VoteList } from '@/components/VoteList';
 import { COUNTRIES, GROUPS } from '@/constants/filters';
@@ -17,6 +17,7 @@ export default function Home() {
     countries: [],
     groups: [],
   });
+  const [sortBy, setSortBy] = useState<SortOption>('RELEVANCE');
   const [searchTerm, setSearchTerm] = useState('');
   const [votes, setVotes] = useState<Vote[]>([]);
   const [loading, setLoading] = useState(false);
@@ -46,13 +47,13 @@ export default function Home() {
     initMixpanel();
   }, []);
 
-  async function searchVotes (searchTerm: string, filters: SearchFilters, loadingSetter: (loading: boolean) => void, page?: number | null) {
+  async function searchVotes (searchTerm: string, filters: SearchFilters, sortBy: SortOption, loadingSetter: (loading: boolean) => void, page?: number | null) {
     loadingSetter(true);
     setError(null);
     try {
       const { 
         results: newVotes, total: totalVotes, page: newPage, has_next: newHasNext,
-       } = await searchVotesWithDetails(searchTerm, filters, page);
+       } = await searchVotesWithDetails(searchTerm, filters, sortBy, page);
       setPage(newPage);
       setHasNext(newHasNext);
       setCurrentSearch(searchTerm);
@@ -71,34 +72,35 @@ export default function Home() {
 
   const searchMore = useCallback(async () => {
     if (!hasNext) return;
-    const newVotes = await searchVotes(currentSearch, filters, setLoadingMore, (page || 1) + 1);
-    trackEvent('Search More', { searchTerm: currentSearch, page: (page || 1) + 1, nbResults: newVotes?.length, filters });
+    const newVotes = await searchVotes(currentSearch, filters, sortBy, setLoadingMore, (page || 1) + 1);
+    trackEvent('Search More', { searchTerm: currentSearch, sortBy, page: (page || 1) + 1, nbResults: newVotes?.length, filters });
     if (newVotes?.length) setVotes([...votes, ...newVotes]);
-  }, [currentSearch, hasNext, page, votes, filters]);
+  }, [currentSearch, hasNext, page, votes, filters, sortBy]);
 
   const handleSearch = useCallback(async () => {
-    const newVotes = await searchVotes(searchTerm, filters, setLoading);
-    if (searchTerm) trackEvent('Search', { searchTerm, nbResults: newVotes?.length, filters, type: 'regular' });
+    const newVotes = await searchVotes(searchTerm, filters, sortBy, setLoading);
+    if (searchTerm) trackEvent('Search', { searchTerm, sortBy, nbResults: newVotes?.length, filters, type: 'regular' });
     if (newVotes?.length) setVotes(newVotes);
-  }, [filters, searchTerm]);
+  }, [filters, searchTerm, sortBy]);
 
   const handleSeachAndRun = useCallback(async (term: string) => {
     setFilters(filters);
     setSearchTerm(term);
-    const newVotes = await searchVotes(term, filters, setLoading);
-    trackEvent('Search', { searchTerm: term, nbResults: newVotes?.length, filters, type: 'sample' });
+    const newVotes = await searchVotes(term, filters, sortBy, setLoading);
+    trackEvent('Search', { searchTerm: term, sortBy, nbResults: newVotes?.length, filters, type: 'sample' });
     if (newVotes?.length) setVotes(newVotes);
-  }, [filters]);
+  }, [filters, sortBy]);
 
   useEffect(() => {
     if (!isInitialLoad.current) return;
     
-    const { searchTerm, filters } = parseUrlParams();
+    const { searchTerm, filters, sortBy } = parseUrlParams();
     setFilters(filters);
+    setSortBy(sortBy);
     if (searchTerm) {
       setSearchTerm(searchTerm);
-      searchVotes(searchTerm, filters, setLoading).then(newVotes => {
-        trackEvent('Search', { searchTerm, nbResults: newVotes?.length, type: 'initial' });
+      searchVotes(searchTerm, filters, sortBy, setLoading).then(newVotes => {
+        trackEvent('Search', { searchTerm, sortBy, nbResults: newVotes?.length, type: 'initial' });
         // console.log('Initial Search results:', { votes: newVotes.length });
         if (newVotes?.length) setVotes(newVotes);
       });
@@ -108,7 +110,7 @@ export default function Home() {
 
   return (
     <main className="container mx-auto px-4 py-8">
-      <Header filters={filters} searchTerm={searchTerm} />
+      <Header filters={filters} searchTerm={searchTerm} sortBy={sortBy} />
       <SearchPanel
         filters={filters}
         onFiltersChange={setFilters}
@@ -117,6 +119,8 @@ export default function Home() {
         onSearch={handleSearch}
         countries={COUNTRIES}
         groups={GROUPS}
+        sortBy={sortBy}
+        onSortChange={setSortBy}
       />
 
       {loading && (<Loader className="py-8" />)}

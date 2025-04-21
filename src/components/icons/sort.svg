@@ -1,0 +1,10 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Three horizontal lines of decreasing size -->
+  <line x1="10" y1="27" x2="60" y2="27" stroke="currentColor" stroke-width="10" stroke-linecap="round" />
+  <line x1="10" y1="52" x2="45" y2="52" stroke="currentColor" stroke-width="10" stroke-linecap="round" />
+  <line x1="10" y1="77" x2="30" y2="77" stroke="currentColor" stroke-width="10" stroke-linecap="round" />
+  
+  <!-- Arrow pointing down -->
+  <line x1="80" y1="20" x2="80" y2="74" stroke="currentColor" stroke-width="10" stroke-linecap="round" />
+  <polyline points="65,65 80,85 95,65" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

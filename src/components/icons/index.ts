@@ -8,5 +8,6 @@ import Help from './help.svg';
 import Info from './info.svg';
 import Share from './share.svg';
 import Filter from './filter.svg';
+import Sort from './sort.svg';
 
-export { ChevronDown, Search, Facebook, Twitter, Email, Globe, Help, Info, Share, Filter }; 
+export { ChevronDown, Search, Facebook, Twitter, Email, Globe, Help, Info, Share, Filter, Sort }; 

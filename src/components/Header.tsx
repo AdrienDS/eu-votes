@@ -2,16 +2,17 @@ import { HelpModal } from './HelpModal';
 import { AboutModal } from './AboutModal';
 import { Share } from '@/components/icons';
 import { useState } from 'react';
-import { SearchFilters } from '@/types';
+import { SearchFilters, SortOption } from '@/types';
 import Image from 'next/image';
 import { trackEvent } from '@/utils/mixpanelClient';
 
 interface HeaderProps {
   filters: SearchFilters;
   searchTerm: string;
+  sortBy: SortOption;
 }
 
-export const Header = ({ filters, searchTerm }: HeaderProps) => {
+export const Header = ({ filters, searchTerm, sortBy }: HeaderProps) => {
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [aboutModalOpen, setAboutModalOpen] = useState(false);
 
@@ -32,6 +33,10 @@ export const Header = ({ filters, searchTerm }: HeaderProps) => {
     // Add groups if any are selected
     if (filters.groups.length > 0) {
       params.set('groups', filters.groups.join(','));
+    }
+
+    if (sortBy && sortBy !== 'RELEVANCE') {
+      params.set('sort', sortBy);
     }
     
     // Only add params if there are any
