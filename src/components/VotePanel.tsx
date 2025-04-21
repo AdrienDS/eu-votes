@@ -2,7 +2,7 @@ import { SearchFilters, Vote, Position } from '@/types';
 import { AutoSizer } from 'react-virtualized';
 import { formatDate } from '@/utils/date';
 import { VoteBar } from './VoteBar';
-import { ChevronDown, Filter } from './icons';
+import { ChevronDown, Filter, OpenInNew } from './icons';
 import { Facts } from './Facts';
 import { Grid, GridCellProps } from 'react-virtualized';
 import { MEPCard } from './MEPCard';
@@ -110,6 +110,7 @@ export function VotePanel({ vote, filters, onToggleVote, expandedVotes }: VoteBa
                           className="hover:text-blue-600"
                         >
                           {source.name}
+                          <OpenInNew className="inline-block w-4 h-4 ml-1 mb-0.5" />
                         </a>
                       </li>
                     ))}

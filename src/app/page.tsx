@@ -11,6 +11,7 @@ import { Loader } from '@/components/Loader';
 import { sampleSearchTerms } from '@/utils/votes';
 import { initMixpanel, trackEvent } from '@/utils/mixpanelClient';
 import { debounce } from '@/utils/utils';
+import { OpenInNew } from '@/components/icons';
 
 export default function Home() {
   const [filters, setFilters] = useState<SearchFilters>({
@@ -52,7 +53,7 @@ export default function Home() {
     setError(null);
     try {
       const { 
-        results: newVotes, total: totalVotes, page: newPage, has_next: newHasNext,
+        results: newVotes, total: totalVotes, page: newPage, has_next: newHasNext, // sources, ...
        } = await searchVotesWithDetails(searchTerm, filters, sortBy, page);
       setPage(newPage);
       setHasNext(newHasNext);
@@ -143,6 +144,14 @@ export default function Home() {
                   </button>
                 ))
               }
+              <br />
+              <div className="text-center text-gray-500 italic pt-8">
+                Don&apos;t know what to search for?<br />
+                <a href="https://howtheyvote.eu/votes?sort=newest" target="_blank" rel="noopener noreferrer" className="link">
+                  <OpenInNew className="inline-block w-4 h-4 mr-1 mb-0.5" />
+                  Explore recent votes on HowTheyVote.eu
+                </a>
+              </div>
             </div>
           ) : total === 0 ? (
             <div className="text-center text-gray-900 py-8">

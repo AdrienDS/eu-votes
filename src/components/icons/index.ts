@@ -9,5 +9,6 @@ import Info from './info.svg';
 import Share from './share.svg';
 import Filter from './filter.svg';
 import Sort from './sort.svg';
+import OpenInNew from './open-in-new.svg';
 
-export { ChevronDown, Search, Facebook, Twitter, Email, Globe, Help, Info, Share, Filter, Sort }; 
+export { ChevronDown, Search, Facebook, Twitter, Email, Globe, Help, Info, Share, Filter, Sort, OpenInNew }; 
