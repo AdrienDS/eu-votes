@@ -111,7 +111,7 @@ export default function Home() {
 
   return (
     <main className="container mx-auto px-4 py-8">
-      <Header filters={filters} searchTerm={searchTerm} sortBy={sortBy} />
+      <Header filters={filters} searchTerm={searchTerm} sortBy={sortBy} hasSearched={hasSearched} />
       <SearchPanel
         filters={filters}
         onFiltersChange={setFilters}

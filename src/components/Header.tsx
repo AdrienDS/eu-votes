@@ -10,11 +10,13 @@ interface HeaderProps {
   filters: SearchFilters;
   searchTerm: string;
   sortBy: SortOption;
+  hasSearched: boolean;
 }
 
-export const Header = ({ filters, searchTerm, sortBy }: HeaderProps) => {
+export const Header = ({ filters, searchTerm, sortBy, hasSearched }: HeaderProps) => {
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [aboutModalOpen, setAboutModalOpen] = useState(false);
+  const [hasClickedHelp, setHasClickedHelp] = useState(false);
 
   const getShareUrl = () => {
     const url = new URL(window.location.href);
@@ -100,6 +102,12 @@ export const Header = ({ filters, searchTerm, sortBy }: HeaderProps) => {
     }
   };
 
+  const handleHelpClick = () => {
+    setHasClickedHelp(true);
+    setHelpModalOpen(true);
+    trackEvent('Help');
+  };
+
   return (
     <>
       <div className="flex justify-between items-center mb-8">
@@ -130,8 +138,8 @@ export const Header = ({ filters, searchTerm, sortBy }: HeaderProps) => {
           </button>
           <button
             id="help-btn"
-            onClick={() => trackEvent('Help') && setHelpModalOpen(true)}
-            className="link-secondary cursor-pointer"
+            onClick={handleHelpClick}
+            className={`link-secondary cursor-pointer ${!hasSearched && !hasClickedHelp ? 'link-shine-rtl' : ''}`}
           >
             Help
           </button>

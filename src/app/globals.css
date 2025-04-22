@@ -145,3 +145,45 @@
     --foreground: #000000;
   }
 }
+
+@layer utilities {
+  @keyframes shine-rtl { /* Utility class producing a right-to-left shine effect with a css animation */
+    /* Start state: shine is off-screen to the right */
+    0% { transform: translateX(100%); opacity: 0; }
+    /* Hold the start state for the pause duration (4.5s / 5s = 90%).
+       The shine itself takes 500ms (0.5s), which is the last 10% of the 5s cycle.
+    */
+    60% { transform: translateX(100%); opacity: 0; }
+    /* Start moving and quickly become visible */
+    80% { opacity: 0.6; } 
+    /* Finish sweep off-screen to the left, fading out */
+    100% { transform: translateX(-100%); opacity: 0; }
+  }
+
+  /* Helper class to apply the effect */
+  .link-shine-rtl {
+    position: relative; /* Needed for absolute positioning of the pseudo-element */
+    overflow: hidden;  /* Hide the pseudo-element when it's off-screen */
+  }
+
+  .link-shine-rtl::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px; /* Width of the "torch light". Adjust as needed. */
+    height: 100%;
+    /* The gradient: transparent edges, bright center */
+    background: linear-gradient(to left, 
+      transparent 0%, 
+      rgba(255, 255, 240, 0.75) 50%, /* Adjust color/opacity for desired shine */
+      transparent 100%
+    );
+    opacity: 0; /* Start hidden */
+    transform: translateX(100%); /* Start off-screen right */
+    /* Apply the animation: name duration timing-function iteration-count */
+    animation: shine-rtl 3s ease-in-out infinite; 
+    pointer-events: none; /* Ensure the pseudo-element doesn't block clicks */
+    z-index: 1; /* Ensure it's above the link text background but below other content if necessary */
+  }
+}
