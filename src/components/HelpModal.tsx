@@ -1,7 +1,7 @@
 import { positionColors } from '@/utils/votes';
 import { trackEvent } from '@/utils/mixpanelClient';
 import { Modal } from './Modal';
-import { Email, Facebook, Filter, Search, Share, Twitter } from './icons';
+import { Email, Facebook, Filter, Search, Share, Sort, Twitter } from './icons';
 
 interface HelpModalProps {
   isOpen: boolean;
@@ -28,6 +28,10 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
               </span>
             </li>
             <li>
+              <Sort className="h-4 w-4 inline-block mr-2" />
+              <span>By default, votes are sorted by relevance to your search term, but you can also sort by date to see the latest or oldest votes first.</span>
+            </li>
+            <li>
               <Filter className="h-4 w-4 inline-block mr-2" />
               <span>Filter by country to see how MEPs from specific countries voted</span>
             </li>
@@ -47,6 +51,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
           <ul className="list-disc list-inside space-y-1 mb-4 text-left">
             <li>Click on a vote to see detailed information</li>
             <li>View vote statistics and breakdowns</li>
+            <li>Learn more about the text by opening the documents listed under &ldquo;Sources&rdquo;</li>
             <li>
               See how individual MEPs voted and contact them directly via
               <Email className="h-3 w-3 inline-block ml-1" /> 
@@ -68,7 +73,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
           <ul className="list-disc list-inside space-y-1 mb-4 text-left">
             <li><Share className="h-4 w-4 inline-block mr-2" /> {' '}
             Use the share button to generate a link to your current view, 
-            including your search term and all your active filters.</li>  
+            including your search term, sort order, and all your active filters.</li>  
           </ul>
         </div>
       </div>
