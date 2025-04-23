@@ -14,9 +14,10 @@ interface VoteBarProps {
   filters: SearchFilters;
   onToggleVote: (voteId: string) => void;
   expandedVotes: Set<string>;
+  votes: Vote[];
 }
 
-export function VotePanel({ vote, filters, onToggleVote, expandedVotes }: VoteBarProps) {
+export function VotePanel({ vote, filters, onToggleVote, expandedVotes, votes }: VoteBarProps) {
   const [detailsVisible, setDetailsVisible] = useState(false);
   const [positionFilter, setPositionFilter] = useState<Position[]>([]);
 
@@ -49,7 +50,7 @@ export function VotePanel({ vote, filters, onToggleVote, expandedVotes }: VoteBa
           <h2 className="text-lg font-semibold primary-text">{vote.display_title}</h2>
           <p className="text-sm secondary-text">{formatDate(vote.timestamp)}</p>
         </div>
-        <div className="flex items-center gap-4 self-start mt-[2px]">
+        <div className="flex items-center gap-4 self-start mt-[2px] w-full sm:w-auto">
           <div className="w-full sm:flex-none">
             {(
               <div className="w-full">
@@ -149,7 +150,8 @@ export function VotePanel({ vote, filters, onToggleVote, expandedVotes }: VoteBa
             <div className="h-[400px] md:h-[600px] pr-4">
               <AutoSizer>
                 {({ width, height }) => {
-                  const cardWidth = 420;
+                  const cardWidth = width < 768 ? Math.min(480, width - 10) : 
+                    width < 1024 ? Math.min(480, width / 2 - 15) : Math.min(480, width / 3 - 20);
                   const columnCount = Math.max(1, Math.floor(width / cardWidth));
                   const rowCount = Math.ceil(visibleVotes.length / columnCount);
                   // console.log('AutoSizer', { width, height, columnCount, rowCount });
@@ -162,10 +164,11 @@ export function VotePanel({ vote, filters, onToggleVote, expandedVotes }: VoteBa
                         vote={visibleVotes[index]}
                         style={{
                           ...style,
-                          width: Math.min(400, width / columnCount - 20),
+                          width: Math.min(cardWidth, width / columnCount - 20),
                           margin: '5px',
                           height: width < 768 ? '160px' : '130px'
                         }}
+                        allVotes={votes}
                       />
                     );
                   };

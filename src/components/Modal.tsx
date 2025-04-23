@@ -1,14 +1,16 @@
 import { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
   title: string;
-  width?: 'sm' | 'md' | 'lg' | 'xl';
+  width?: 'sm' | 'md' | 'lg' | 'xl' | 'custom';
+  modalClass?: string;
 }
 
-export function Modal({ isOpen, onClose, children, title, width = 'md' }: ModalProps) {
+export function Modal({ isOpen, onClose, children, title, width = 'md', modalClass = '' }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,13 +38,14 @@ export function Modal({ isOpen, onClose, children, title, width = 'md' }: ModalP
     md: 'max-w-md',
     lg: 'max-w-lg',
     xl: 'max-w-xl',
+    custom: '',
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
       <div
         ref={modalRef}
-        className={`bg-white rounded-lg shadow-xl w-full ${widthClasses[width]} max-h-[90vh] flex flex-col`}
+        className={`bg-white rounded-lg shadow-xl w-full ${widthClasses[width]} ${modalClass} max-h-[90vh] flex flex-col`}
       >
         <div className="px-6 py-4 border-b">
           <h2 className="text-lg font-semibold primary-text">{title}</h2>
@@ -51,6 +54,7 @@ export function Modal({ isOpen, onClose, children, title, width = 'md' }: ModalP
           {children}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 } 

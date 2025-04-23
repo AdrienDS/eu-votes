@@ -23,7 +23,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
             <li>
               <Search className="h-4.5 w-4.5 inline-block mr-1.5 "/>
               <span>  
-                Use the search bar to find specific votes. 
+                Use the search bar to find votes on a specific topic. 
                 You can search for keywords such as &ldquo;Environment&rdquo;, &ldquo;Ukraine&rdquo;, &ldquo;Taxes&rdquo;, etc...
               </span>
             </li>
@@ -58,6 +58,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
               <Facebook className="h-3 w-3 inline-block ml-1" />
               <Twitter className="h-3 w-3 inline-block ml-1" />
             </li>
+            <li>Click on a MEP&apos;s name to see their voting history on the selected topic</li>
             <li>
               <Filter className="h-4 w-4 inline-block mr-2 "/>
               <span>Filter MEPs by position (</span>

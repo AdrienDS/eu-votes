@@ -24,6 +24,7 @@ export async function searchVotes(searchTerm: string, sortBy?: SortOption|null, 
     params.set('sort_by', 'timestamp');
     params.set('sort_order', sortBy === 'OLDEST' ? 'asc' : 'desc'); 
   }
+  console.log('SORTBY:', sortBy, params.toString());
 
   const response = await fetch(`${API_BASE_URL}/votes/search?${params.toString()}`);
   if (!response.ok) {

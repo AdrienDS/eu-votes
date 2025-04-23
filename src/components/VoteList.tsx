@@ -71,6 +71,7 @@ export function VoteList({
             filters={filters}
             onToggleVote={toggleVote}
             expandedVotes={expandedVotes}
+            votes={votes}
           />
         ))}
 
