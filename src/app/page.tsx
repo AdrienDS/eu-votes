@@ -32,6 +32,14 @@ export default function Home() {
   const isInitialLoad = useRef(true);
   const latestFilters = useRef(filters);
 
+  const handleSearch = useCallback(async () => {
+    const newVotes = await searchVotes(searchTerm, filters, sortBy, setLoading);
+    if (searchTerm) trackEvent('Search', { searchTerm, sortBy, nbResults: newVotes?.length, filters, type: 'regular' });
+    if (newVotes?.length) setVotes(newVotes);
+  }, [filters, searchTerm, sortBy]);
+
+  const debouncedSearch = useMemo(() => debounce(handleSearch, 300), [handleSearch]);
+
   const debouncedFilterChanged = useMemo(() => debounce(() => {
     trackEvent('Filters Changed', latestFilters.current);
   }, 3000, false), []);
@@ -46,6 +54,33 @@ export default function Home() {
 
   useEffect(() => {
     initMixpanel();
+  }, []);
+
+  // Handle search when sortBy or searchTerm changes
+  useEffect(() => {
+    if (!isInitialLoad.current && hasSearched) {
+      debouncedSearch();
+    }
+  }, [sortBy, searchTerm, debouncedSearch]);
+
+  // Initial load with URL parameters
+  useEffect(() => {
+    if (!isInitialLoad.current) return;
+    
+    const { searchTerm, filters, sortBy } = parseUrlParams();
+    setFilters(filters);
+    setSortBy(sortBy);
+    if (searchTerm) {
+      setSearchTerm(searchTerm);
+      // Use the values directly from parseUrlParams for initial search
+      searchVotes(searchTerm, filters, sortBy, setLoading).then(newVotes => {
+        if (newVotes?.length) {
+          setVotes(newVotes);
+          setHasSearched(true);
+        }
+      });
+    }
+    isInitialLoad.current = false;
   }, []);
 
   async function searchVotes (searchTerm: string, filters: SearchFilters, sortBy: SortOption, loadingSetter: (loading: boolean) => void, page?: number | null) {
@@ -78,12 +113,6 @@ export default function Home() {
     if (newVotes?.length) setVotes([...votes, ...newVotes]);
   }, [currentSearch, hasNext, page, votes, filters, sortBy]);
 
-  const handleSearch = useCallback(async () => {
-    const newVotes = await searchVotes(searchTerm, filters, sortBy, setLoading);
-    if (searchTerm) trackEvent('Search', { searchTerm, sortBy, nbResults: newVotes?.length, filters, type: 'regular' });
-    if (newVotes?.length) setVotes(newVotes);
-  }, [filters, searchTerm, sortBy]);
-
   const handleSeachAndRun = useCallback(async (term: string) => {
     setFilters(filters);
     setSearchTerm(term);
@@ -91,23 +120,6 @@ export default function Home() {
     trackEvent('Search', { searchTerm: term, sortBy, nbResults: newVotes?.length, filters, type: 'sample' });
     if (newVotes?.length) setVotes(newVotes);
   }, [filters, sortBy]);
-
-  useEffect(() => {
-    if (!isInitialLoad.current) return;
-    
-    const { searchTerm, filters, sortBy } = parseUrlParams();
-    setFilters(filters);
-    setSortBy(sortBy);
-    if (searchTerm) {
-      setSearchTerm(searchTerm);
-      searchVotes(searchTerm, filters, sortBy, setLoading).then(newVotes => {
-        trackEvent('Search', { searchTerm, sortBy, nbResults: newVotes?.length, type: 'initial' });
-        // console.log('Initial Search results:', { votes: newVotes.length });
-        if (newVotes?.length) setVotes(newVotes);
-      });
-    }
-    isInitialLoad.current = false;
-  }, []);
 
   return (
     <main className="container mx-auto px-4 py-8">

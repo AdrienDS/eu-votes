@@ -5,10 +5,9 @@ import { SortOption } from '@/types';
 interface SortDropdownProps {
   sortBy: SortOption;
   onSortChange: (sortBy: SortOption) => void;
-  onSearch: () => void;
 }
 
-export function SortDropdown({ sortBy, onSortChange, onSearch }: SortDropdownProps) {
+export function SortDropdown({ sortBy, onSortChange }: SortDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -35,9 +34,12 @@ export function SortDropdown({ sortBy, onSortChange, onSearch }: SortDropdownPro
   };
 
   const handleSortChange = (newSort: SortOption) => {
+    if (newSort === sortBy) {
+      setIsOpen(false);
+      return;
+    }
     onSortChange(newSort);
     setIsOpen(false);
-    onSearch();
   };
 
   const sortOptions: SortOption[] = ['RELEVANCE', 'NEWEST', 'OLDEST'];

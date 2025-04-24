@@ -49,7 +49,7 @@ export const SearchPanel = ({
             <Search className="h-6 w-6" />
           </button>
         </div>
-        <SortDropdown sortBy={sortBy} onSortChange={onSortChange} onSearch={onSearch} />
+        <SortDropdown sortBy={sortBy} onSortChange={onSortChange} />
       </div>
 
       <div className="flex gap-4">
