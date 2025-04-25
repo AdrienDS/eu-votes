@@ -9,13 +9,36 @@ interface AboutModalProps {
 
 export function AboutModal({ isOpen, onClose }: AboutModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="About" width="lg">
+    <Modal isOpen={isOpen} onClose={onClose} title="About" width="xl">
           <div className="prose max-w-none secondary-text space-y-4">
-            <p className="text-md text-justify">
-              This app uses the data from the great{' '}
-              <a className="link" href="https://howtheyvote.eu" target="_blank" onClick={() => trackEvent('HowTheyVote')}>HowTheyVote.eu</a>{' '}
-              API to search for votes, and get details on every vote, including information about the members of the European Parliament.
-            </p>
+          <p className="text-md text-justify">
+            This app helps you quickly understand how Members of the European Parliament (MEPs) vote on topics that matter to you. 
+            Filter by country and political group, type in a subject - like <em>energy</em>, <em>migration</em>, or <em>cybersecurity</em> - 
+            and instantly see a visual summary of how selected groups voted on the most relevant motions.
+          </p>
+
+          <p className="text-md text-justify">
+            It uses data from the excellent{' '}
+            <a className="link" href="https://howtheyvote.eu" target="_blank" onClick={() => trackEvent('HowTheyVote')}>
+              HowTheyVote.eu
+            </a>{' '}
+            API, which provides detailed information about every vote and every MEP.
+          </p>
+
+          <p className="text-md text-justify">
+            The idea came from noticing that a political group&apos;s voting record didn&apos;t always align with positions I cared about.
+            I found there was already a lot of useful data available on EU voting patterns, 
+            but I felt it would be helpful to see a group&apos;s stance on a topic summarized clearly on a single page. This app was created with that goal in mind.
+          </p>
+
+          <p className="text-md text-justify">
+            National politics tend to dominate the headlines, while the decisions made in the 
+            European Parliament are often underreported, 
+            even though they shape policies that affect us all. 
+            My hope is that this app contributes to making the EU&apos;s legislative work more transparent and accessible, 
+            and helps citizens stay informed and engaged.
+          </p>
+
             <div className="border-t border-gray-200 pt-4">
               <p className="text-sm secondary-text">
                 Built by{' '}
